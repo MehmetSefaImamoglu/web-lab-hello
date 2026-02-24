@@ -1,68 +1,205 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Genel sıfırlama */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #f9f9f9;
+}
+
+/* Skip link: normalde gizli, Tab ile görünür */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: #1E3A8A;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Focus göstergesi — ASLA kaldırma! */
+:focus {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+/* Header */
+header {
+  background: #1E3A8A;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+header h1 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+nav ul {
+  list-style: none;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  gap: 1rem;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+nav a {
+  color: white;
+  text-decoration: none;
 }
 
-button {
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Ana içerik */
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+section h2 {
+  font-size: 1.5rem;
+  color: #1E3A8A;
+  border-bottom: 2px solid #1E3A8A;
+  padding-bottom: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Profil fotoğrafı — yuvarlak ve küçük (PP gibi) */
+figure {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+figure img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;        /* Yuvarlak yapar */
+  object-fit: cover;         /* Fotoğrafı kırpar, bozulmaz */
+  border: 3px solid #1E3A8A;
+}
+
+figcaption {
+  font-style: italic;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* Proje kartları */
+article {
+  background: white;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+article h3 {
+  color: #1E3A8A;
+  margin-bottom: 0.5rem;
+}
+
+article img {
+  width: 100%;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+}
+
+article ul {
+  list-style: none;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+article ul li {
+  background: #e0e7ff;
+  color: #1E3A8A;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* Form stilleri */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.error-msg {
+  color: red;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+button[type="submit"] {
+  background: #1E3A8A;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background: #1e40af;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 0.5rem;
+  color: #1E3A8A;
+}
+
+/* Footer */
+footer {
+  background: #1E3A8A;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
 }
