@@ -1,30 +1,60 @@
-# Web LAB-1 - Hello Project
+# 🌐 Web LAB-1 & LAB-2 — Kişisel Portföy Projesi
 
-## Hakkinda
-Bu proje Web Tasarimi ve Programlama dersi LAB-1 kapsaminda
-Vite + React + TypeScript kullanilarak olusturulmustur.
+## 📋 Hakkında
+Bu proje, **Web Tasarımı ve Programlama** dersi LAB-1 ve LAB-2 kapsamında
+**Vite + React + TypeScript** kullanılarak oluşturulmuştur.
 
-## Gelistirici
-- Ad Soyad: Sefa İMAMOĞLU
-- Ogrenci No: 230541038
-- Bolum: Yazılım Muhendisligi
+- **LAB-1:** Geliştirme ortamı kurulumu, Vite + React + TypeScript projesi, Git iş akışı
+- **LAB-2:** Semantik HTML5, Erişilebilirlik (a11y), Form yapıları, Lighthouse testi
 
-## Kullanilan Teknolojiler
-- React 18
-- TypeScript
-- Vite
+---
 
-## Kurulum
+## 👤 Geliştirici
+| Alan | Bilgi |
+|---|---|
+| **Ad Soyad** | Sefa İMAMOĞLU |
+| **Öğrenci No** | 230541038 |
+| **Bölüm** | Yazılım Mühendisliği |
 
-    npm install
+---
 
-## Calistirma
+## 🛠️ Kullanılan Teknolojiler
+- ⚛️ React 18
+- 🔷 TypeScript
+- ⚡ Vite
+- 🏗️ Semantik HTML5
+- 🎨 CSS3
 
-    npm run dev
+---
 
-Tarayicida http://localhost:5173 adresini ac.
+## 🚀 Kurulum ve Çalıştırma
 
-## Proje Yapisi
-- src/App.tsx - Ana sayfa bileseni
-- src/App.css - Sayfa stilleri
-- public/ - Statik dosyalar
+```bash
+npm install
+npm run dev
+```
+
+Tarayıcıda `http://localhost:5173` adresini aç.
+
+---
+
+## 📁 Proje Yapısı
+```
+web-lab-hello/
+├── src/
+│   ├── App.tsx       ← Ana portföy bileşeni
+│   └── index.css     ← Sayfa stilleri
+├── public/
+│   ├── sefa.jpeg     ← Profil fotoğrafı
+│   └── lighthouse.png ← Lighthouse raporu
+└── index.html
+```
+
+---
+
+## ♿ Lighthouse Erişilebilirlik Testi (LAB-2)
+
+**Accessibility Puanı: 92 / 100** ✅
+
+![Lighthouse Erişilebilirlik Raporu](public/lighthouse.png)
+
