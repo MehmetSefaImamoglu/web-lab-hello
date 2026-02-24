@@ -7,6 +7,7 @@ function App() {
       <p>Ogrenci No: 230541038</p>
       <p>Bolum: YAZILIM MÜHENDİSLİĞİ</p>
       <p>Hobiler: Futbol,Yüzme,Kitap Okumak,Film İzlemek,Müzik Dinlemek</p>
+       <p>Bu projeyi Vite + React + TypeScript ile olusturdum.</p>
     </div>
   )
 }
