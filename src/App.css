@@ -1,11 +1,13 @@
+/* LAB-1 */
 div {
   font-family: Arial, sans-serif;
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #f0f8ff;
+  background-color: #e8f4fd;
   border-radius: 10px;
+  border: 2px solid #1a73e8;
 }
-h1 { color: #1a73e8; }
-h2 { color: #333; }
+h1 { color: #1a73e8; text-align: center; }
+h2 { color: #555; text-align: center; }
 
