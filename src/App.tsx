@@ -7,7 +7,7 @@ function App() {
       </a>
 
       <header>
-        <h1>Sefa İmamoğlu — Kişisel Portföy</h1>
+        <span className="site-title">Sefa İmamoğlu</span>
         <nav aria-label="Ana navigasyon">
           <ul>
             <li><a href="#hakkimda">Hakkımda</a></li>
@@ -19,59 +19,88 @@ function App() {
 
 
       <main id="main-content">
+        {/* ===== HAKKIMDA ===== */}
         <section id="hakkimda">
           <h2>Hakkımda</h2>
-          <figure>
-            <img
-              src="/sefa.jpeg"
-              alt="Sefa İmamoğlu'nun profil fotoğrafı"
-            />
-            <figcaption>Sefa İmamoğlu</figcaption>
-          </figure>
-          <p>
-            Merhaba! Ben Sefa. Yazılım Mühendisliği okuyorum.
-            Web teknolojilerine ilgi duyuyorum.
-          </p>
-          <ul>
-            <li>React</li>
-            <li>TypeScript</li>
-            <li>HTML5 & CSS3</li>
-          </ul>
+          <div className="about-content">
+            <figure>
+              <img
+                src="/sefa.jpeg"
+                alt="Sefa İmamoğlu'nun profil fotoğrafı"
+              />
+              <figcaption>Sefa İmamoğlu</figcaption>
+            </figure>
+            <div className="about-text">
+              <p>
+                Merhaba! Ben Sefa. Yazılım Mühendisliği okuyorum.
+                Web teknolojilerine ilgi duyuyorum.
+                Modern arayüzler tasarlamayı ve geliştirmeyi seviyorum.
+              </p>
+              {/* Beceri etiketleri — Flexbox toolbar */}
+              <ul className="skill-tags" role="list" aria-label="Beceri etiketleri">
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>JavaScript</li>
+                <li>React</li>
+                <li>TypeScript</li>
+                <li>Git</li>
+              </ul>
+            </div>
+          </div>
         </section>
 
 
+        {/* ===== PROJELERİM ===== */}
         <section id="projeler">
           <h2>Projelerim</h2>
+          <div className="project-grid">
 
-          <article>
-            <h3>Web LAB-1 Projesi</h3>
-            <p>Vite + React + TypeScript ile oluşturulan kişisel tanıtım sayfası.</p>
-            <img
-              src="https://via.placeholder.com/300x150"
-              alt="Web LAB-1 projesinin ekran görüntüsü"
-            />
-            <ul>
-              <li>React</li>
-              <li>TypeScript</li>
-              <li>Vite</li>
-            </ul>
-          </article>
+            <article className="project-card">
+              <img
+                src="https://placehold.co/600x300/1E3A8A/FFFFFF?text=Web+LAB+1"
+                alt="Web LAB-1 projesinin ekran görüntüsü"
+              />
+              <h3>Web LAB-1 Projesi</h3>
+              <p>Vite + React + TypeScript ile oluşturulan kişisel tanıtım sayfası.</p>
+              <ul className="skill-tags">
+                <li>React</li>
+                <li>TypeScript</li>
+                <li>Vite</li>
+              </ul>
+            </article>
 
-          <article>
-            <h3>Kişisel Portföy Sayfası</h3>
-            <p>Semantik HTML5 ve erişilebilirlik ilkeleri ile oluşturulan portföy sayfası.</p>
-            <img
-              src="https://via.placeholder.com/300x150"
-              alt="Kişisel portföy sayfasının ekran görüntüsü"
-            />
-            <ul>
-              <li>HTML5</li>
-              <li>CSS3</li>
-              <li>Erişilebilirlik (a11y)</li>
-            </ul>
-          </article>
+            <article className="project-card">
+              <img
+                src="https://placehold.co/600x300/7C3AED/FFFFFF?text=Portföy+Sayfası"
+                alt="Kişisel portföy sayfasının ekran görüntüsü"
+              />
+              <h3>Kişisel Portföy Sayfası</h3>
+              <p>Semantik HTML5 ve erişilebilirlik ilkeleri ile oluşturulan portföy sayfası.</p>
+              <ul className="skill-tags">
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>Erişilebilirlik (a11y)</li>
+              </ul>
+            </article>
+
+            <article className="project-card">
+              <img
+                src="https://placehold.co/600x300/2563EB/FFFFFF?text=Responsive+Layout"
+                alt="Responsive layout projesinin ekran görüntüsü"
+              />
+              <h3>Responsive Layout (LAB-3)</h3>
+              <p>Mobile-first yaklaşım, CSS Grid ve Flexbox ile 3 breakpoint'te çalışan portföy tasarımı.</p>
+              <ul className="skill-tags">
+                <li>CSS Grid</li>
+                <li>Flexbox</li>
+                <li>Responsive</li>
+              </ul>
+            </article>
+
+          </div>
         </section>
 
+        {/* ===== İLETİŞİM ===== */}
         <section id="iletisim">
           <h2>İletişim</h2>
           <form action="#" method="POST" noValidate>
@@ -141,6 +170,3 @@ function App() {
 }
 
 export default App
-
-
-
