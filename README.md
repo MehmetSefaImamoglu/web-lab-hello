@@ -1,6 +1,7 @@
-# Web LAB Projesi (LAB-1 → LAB-4)
+# Web LAB Projesi (LAB-1 → LAB-5)
 
-Web Tasarımı ve Programlama dersi kapsamında geliştirdiğim proje. Vite + React + TypeScript ile başladım, her lab'da yeni bir şey ekledim.
+Web Tasarımı ve Programlama dersi kapsamında geliştirdiğim kişisel portföy projesi.  
+Vite + React + TypeScript altyapısıyla başladı, her lab'da yeni bir katman eklendi.
 
 ## Geliştirici
 
@@ -8,27 +9,29 @@ Web Tasarımı ve Programlama dersi kapsamında geliştirdiğim proje. Vite + Re
 
 ---
 
-## Lablar
+## Lab Özeti
 
-| Lab | Ne yaptım |
-|-----|-----------|
-| LAB-1 | Vite + React + TypeScript kurulumu, Git ile versiyon kontrolü |
-| LAB-2 | Semantik HTML, erişilebilirlik (a11y), form yapıları, Lighthouse testi |
-| LAB-3 | Mobile-first tasarım, Flexbox & Grid, Design Tokens, `clamp()` ile fluid typography |
-| LAB-4 | Tailwind CSS v4 entegrasyonu, Button/Input/Card/Alert bileşenleri, dark mode, UI Kit sayfası |
+| Lab | Konu | Ne Yaptım |
+|-----|------|-----------|
+| **LAB-1** | Ortam Kurulumu | Vite + React + TypeScript kurulumu, Git ile versiyon kontrolü |
+| **LAB-2** | Semantik HTML & Erişilebilirlik | Semantik HTML5 yapısı, a11y, form, Lighthouse skoru 92/100 |
+| **LAB-3** | Responsive CSS | Mobile-first tasarım, Flexbox & Grid, Design Tokens, `clamp()` fluid typography |
+| **LAB-4** | Tailwind CSS & UI Kit | Tailwind v4 entegrasyonu, Button/Input/Card/Alert bileşenleri, dark mode |
+| **LAB-5** | JavaScript/TypeScript & State | Fetch API, async/await, TypeScript tipleri, state yönetimi, filtreleme & sıralama |
 
 ---
 
 ## Kullanılan Teknolojiler
 
-- React 19, TypeScript, Vite
-- Semantik HTML5, CSS3 (Flexbox, Grid, Custom Properties)
-- Tailwind CSS v4
+- **React 19** + **TypeScript** + **Vite**
+- **Tailwind CSS v4** — dark mode desteği
+- **Semantik HTML5**, CSS3 (Flexbox, Grid, Custom Properties)
+- **ES Modules**, async/await, Fetch API
 - Mobile-first responsive tasarım
 
 ---
 
-## Çalıştırmak için
+## Çalıştırmak İçin
 
 ```bash
 npm install
@@ -39,7 +42,7 @@ npm run dev
 
 ---
 
-## Proje yapısı
+## Proje Yapısı
 
 ```
 src/
@@ -50,9 +53,29 @@ src/
 │   └── Alert.tsx
 ├── pages/
 │   └── UIKit.tsx
+├── services/
+│   └── projectService.ts   ← LAB-5: Fetch API servisi
+├── types/
+│   └── project.ts          ← LAB-5: TypeScript tipleri
+├── utils/
+│   └── projectHelpers.ts   ← LAB-5: Filtreleme & sıralama
 ├── App.tsx
 └── index.css
+public/
+└── data/
+    └── projects.json       ← LAB-5: Mock proje verisi
 ```
+
+---
+
+## LAB-5 Öne Çıkan Özellikler
+
+- **JSON'dan dinamik veri çekme** — `fetchProjects()` ile `async/await` + hata yönetimi
+- **TypeScript tip güvenliği** — `interface Project`, `type Category`, sıfır `any`
+- **State yönetimi** — `useState` + `useEffect`, DOM'a dokunmadan UI güncelleme
+- **Arama filtresi** — başlık, açıklama ve teknoloji alanlarında eş zamanlı arama
+- **Kategori filtresi** — Frontend / Fullstack / Backend / Tümü
+- **Sıralama** — Yıla veya başlığa göre artan/azalan
 
 ---
 
@@ -64,21 +87,23 @@ src/
 
 ---
 
-## Ekran Görüntüleri (LAB-3)
-
-| Mobil (375px) | Tablet (768px) | Masaüstü (1280px) |
-|:---:|:---:|:---:|
-| ![Mobil](screenshots/screenshot-mobile.png) | ![Tablet](screenshots/screenshot-tablet.png) | ![Masaüstü](screenshots/screenshot-desktop.png) |
-
----
-
 ## UI Bileşenleri (LAB-4)
 
 Sayfadaki **UI Kit** butonuna tıklayarak bileşenleri canlı görebilirsin.
 
 | Bileşen | Varyantlar |
 |---------|------------|
-| `Button` | primary, secondary, danger, ghost / sm, md, lg |
-| `Input` | normal, error, helpText, disabled |
-| `Card` | elevated, outlined, filled |
-| `Alert` | info, success, warning, error, dismissible |
+| `Button` | primary, secondary, danger, ghost · sm, md, lg |
+| `Input`  | normal, error, helpText, disabled |
+| `Card`   | elevated, outlined, filled |
+| `Alert`  | info, success, warning, error, dismissible |
+
+---
+
+## Git Branch Yapısı
+
+```
+main
+├── feature/tailwindcss-ui-kit    ← LAB-4
+└── feature/typescript-projects   ← LAB-5
+```
