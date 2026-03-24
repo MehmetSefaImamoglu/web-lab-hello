@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import type { Project, Category, SortField, SortOrder } from './types/project'
+import { fetchProjects } from './services/projectService'
+import { applyFilters } from './utils/projectHelpers'
 import Button from './components/Button'
 import Input from './components/Input'
 import Card from './components/Card'
@@ -6,17 +9,73 @@ import Alert from './components/Alert'
 import UIKit from './pages/UIKit'
 
 function App() {
-  // Dark mode state — HTML'e .dark class'ı ekler/çıkarır
+  // ===== GLOBAL STATE =====
   const [isDark, setIsDark] = useState(false)
-  // UIKit sayfasını göster/gizle
   const [showUIKit, setShowUIKit] = useState(false)
-  // Alert kapatma
   const [showAlert, setShowAlert] = useState(true)
 
+  // ===== LAB-5: PROJE STATE'LERİ =====
+  const [projects, setProjects] = useState<Project[]>([])
+  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState<Category | 'all'>('all')
+  const [sortField, setSortField] = useState<SortField>('year')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // ===== DARK MODE =====
   const toggleDark = () => {
     const html = document.documentElement
     html.classList.toggle('dark')
     setIsDark(!isDark)
+  }
+
+  // ===== LAB-5: VERİ ÇEKME (useEffect + async/await) =====
+  useEffect(() => {
+    // useEffect içinde doğrudan async callback kullanılamaz!
+    // Bu yüzden iç fonksiyon tanımlayıp çağırıyoruz.
+    async function loadProjects() {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await fetchProjects()
+        setProjects(data)
+      } catch (err) {
+        // err instanceof Error kontrolü — TypeScript tip güvenliği
+        setError(
+          err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu'
+        )
+      } finally {
+        // Her durumda çalışır — loading spinner'ı kapat
+        setLoading(false)
+      }
+    }
+
+    loadProjects()
+  }, []) // Boş bağımlılık dizisi → yalnızca ilk render'da çalışır
+
+  // ===== LAB-5: TÜRETİLMİŞ (DERIVED) VERİ =====
+  // State değiştiğinde otomatik yeniden hesaplanır
+  const filteredProjects = applyFilters(
+    projects,
+    search,
+    category,
+    sortField,
+    sortOrder
+  )
+
+  const categories: (Category | 'all')[] = [
+    'all',
+    'frontend',
+    'fullstack',
+    'backend',
+  ]
+
+  const categoryLabels: Record<Category | 'all', string> = {
+    all: 'Tümü',
+    frontend: 'Frontend',
+    fullstack: 'Fullstack',
+    backend: 'Backend',
   }
 
   return (
@@ -30,27 +89,22 @@ function App() {
         Ana içeriğe atla
       </a>
 
-      {/* ===== DARK MODE TOGGLE BUTONU ===== */}
+      {/* ===== DARK MODE TOGGLE ===== */}
       <button
         onClick={toggleDark}
         className="fixed top-4 right-4 z-50 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2.5 rounded-full shadow-lg hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-label="Tema değiştir"
       >
-        {/* Açık temada: ay ikonu; karanlık temada: güneş ikonu */}
         <span className="dark:hidden text-lg">🌙</span>
         <span className="hidden dark:inline text-lg">☀️</span>
       </button>
 
-      {/* ===== HEADER — Flexbox ile sticky navigasyon ===== */}
+      {/* ===== HEADER ===== */}
       <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-
-          {/* Site başlığı / logo */}
           <span className="text-xl font-bold text-blue-800 dark:text-blue-300 tracking-tight">
             Sefa İmamoğlu
           </span>
-
-          {/* Navigasyon */}
           <nav aria-label="Ana navigasyon">
             <ul className="flex flex-wrap gap-1">
               <li>
@@ -68,7 +122,6 @@ function App() {
                   İletişim
                 </a>
               </li>
-              {/* UI Kit sekme butonu */}
               <li>
                 <button
                   onClick={() => setShowUIKit(!showUIKit)}
@@ -82,7 +135,7 @@ function App() {
         </div>
       </header>
 
-      {/* ===== UI KIT SAYFASI (toggle ile açılır) ===== */}
+      {/* ===== UI KIT SAYFASI ===== */}
       {showUIKit ? (
         <UIKit />
       ) : (
@@ -91,8 +144,6 @@ function App() {
           {/* === HAKKIMDA === */}
           <section id="hakkimda" className="py-16 px-4 bg-white dark:bg-gray-950">
             <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
-
-              {/* Profil fotoğrafı */}
               <figure className="shrink-0">
                 <img
                   src="/sefa.jpeg"
@@ -103,8 +154,6 @@ function App() {
                   Sefa İmamoğlu
                 </figcaption>
               </figure>
-
-              {/* Metin ve beceriler */}
               <div className="text-center md:text-left">
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   Hakkımda
@@ -114,8 +163,6 @@ function App() {
                   Web teknolojilerine ilgi duyuyorum ve modern arayüzler tasarlamayı,
                   geliştirmeyi seviyorum.
                 </p>
-
-                {/* Beceri etiketleri — Flexbox toolbar */}
                 <ul className="flex flex-wrap gap-2 justify-center md:justify-start" role="list" aria-label="Beceri etiketleri">
                   {['HTML5', 'CSS3', 'JavaScript', 'React', 'TypeScript', 'Tailwind', 'Git'].map((skill) => (
                     <li
@@ -130,65 +177,158 @@ function App() {
             </div>
           </section>
 
-          {/* === PROJELERİM === */}
+          {/* === PROJELERİM — LAB-5: JSON'dan dinamik veri === */}
           <section id="projeler" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-10">
                 Projelerim
               </h2>
 
-              {/* Mobil: 1 sütun | Tablet: 2 sütun | Masaüstü: 3 sütun */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* HATA DURUMU */}
+              {error && (
+                <div className="mb-6">
+                  <Alert variant="error" title="Veri Yükleme Hatası">
+                    {error}
+                  </Alert>
+                </div>
+              )}
 
-                <Card
-                  variant="elevated"
-                  title="Web LAB-1 Projesi"
-                  image="https://placehold.co/600x300/1E3A8A/FFFFFF?text=Web+LAB+1"
-                  imageAlt="Web LAB-1 projesinin ekran görüntüsü"
-                  footer={
-                    <div className="flex gap-2 flex-wrap">
-                      {['React', 'TypeScript', 'Vite'].map(t => (
-                        <span key={t} className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-0.5 rounded-full">{t}</span>
-                      ))}
-                    </div>
-                  }
-                >
-                  Vite + React + TypeScript ile oluşturulan kişisel tanıtım sayfası.
-                </Card>
+              {/* FİLTRELER — LAB-5: State ile yönetilen UI kontrolleri */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-8 items-start sm:items-center flex-wrap">
 
-                <Card
-                  variant="elevated"
-                  title="Kişisel Portföy (LAB-2)"
-                  image="https://placehold.co/600x300/7C3AED/FFFFFF?text=Portföy+Sayfası"
-                  imageAlt="Kişisel portföy sayfasının ekran görüntüsü"
-                  footer={
-                    <div className="flex gap-2 flex-wrap">
-                      {['HTML5', 'CSS3', 'a11y'].map(t => (
-                        <span key={t} className="bg-violet-100 dark:bg-violet-900 text-violet-800 dark:text-violet-200 text-xs px-2 py-0.5 rounded-full">{t}</span>
-                      ))}
-                    </div>
-                  }
-                >
-                  Semantik HTML5 ve erişilebilirlik ilkeleri ile oluşturulan portföy sayfası.
-                </Card>
+                {/* Arama input'u — onChange direkt state günceller */}
+                <div className="w-full sm:w-64">
+                  <Input
+                    id="project-search"
+                    placeholder="Proje, teknoloji ara..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
 
-                <Card
-                  variant="elevated"
-                  title="Responsive Layout (LAB-3)"
-                  image="https://placehold.co/600x300/2563EB/FFFFFF?text=Responsive+Layout"
-                  imageAlt="Responsive layout projesinin ekran görüntüsü"
-                  footer={
-                    <div className="flex gap-2 flex-wrap">
-                      {['CSS Grid', 'Flexbox', 'Mobile-First'].map(t => (
-                        <span key={t} className="bg-sky-100 dark:bg-sky-900 text-sky-800 dark:text-sky-200 text-xs px-2 py-0.5 rounded-full">{t}</span>
-                      ))}
-                    </div>
-                  }
-                >
-                  Mobile-first yaklaşım, CSS Grid ve Flexbox ile 3 breakpoint'te çalışan portföy.
-                </Card>
+                {/* Kategori filtreleri */}
+                <div className="flex gap-2 flex-wrap" role="group" aria-label="Kategori filtresi">
+                  {categories.map((cat) => (
+                    <Button
+                      key={cat}
+                      variant={category === cat ? 'primary' : 'ghost'}
+                      size="sm"
+                      onClick={() => setCategory(cat)}
+                    >
+                      {categoryLabels[cat]}
+                    </Button>
+                  ))}
+                </div>
 
+                {/* Sıralama kontrolleri */}
+                <div className="flex gap-2 items-center">
+                  <select
+                    id="sort-field"
+                    value={sortField}
+                    onChange={(e) => setSortField(e.target.value as SortField)}
+                    className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    aria-label="Sıralama alanı"
+                  >
+                    <option value="year">Yıl</option>
+                    <option value="title">Başlık</option>
+                  </select>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'))}
+                    aria-label={`Sıralama yönü: ${sortOrder === 'asc' ? 'artan' : 'azalan'}`}
+                  >
+                    {sortOrder === 'asc' ? '↑ Artan' : '↓ Azalan'}
+                  </Button>
+                </div>
               </div>
+
+              {/* YÜKLENİYOR DURUMU */}
+              {loading && (
+                <div className="flex justify-center items-center py-16">
+                  <div className="flex flex-col items-center gap-3 text-gray-500 dark:text-gray-400">
+                    <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                    <p>Projeler yükleniyor...</p>
+                  </div>
+                </div>
+              )}
+
+              {/* SONUÇ YOK DURUMU */}
+              {!loading && !error && filteredProjects.length === 0 && (
+                <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+                  <p className="text-4xl mb-3">🔍</p>
+                  <p className="text-lg font-medium">Eşleşen proje bulunamadı.</p>
+                  <p className="text-sm mt-1">Arama terimini veya kategoriyi değiştirmeyi dene.</p>
+                </div>
+              )}
+
+              {/* PROJE LİSTESİ — LAB-5: filtered (türetilmiş) veriyi render et */}
+              {!loading && !error && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProjects.map((project) => (
+                    <Card
+                      key={project.id}   // key olarak index değil id kullan!
+                      variant="elevated"
+                      title={project.title}
+                      image={project.image}
+                      imageAlt={`${project.title} ekran görüntüsü`}
+                      footer={
+                        <div className="flex flex-wrap gap-1">
+                          {project.tech.map((t) => (
+                            <span
+                              key={t}
+                              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-0.5 rounded-full"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      }
+                    >
+                      <p className="text-sm mb-3">{project.description}</p>
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          {project.year} · {project.category}
+                          {project.featured && (
+                            <span className="ml-2 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-xs px-1.5 py-0.5 rounded-full">
+                              ⭐ Öne Çıkan
+                            </span>
+                          )}
+                        </p>
+                        <div className="flex gap-2">
+                          {project.demoUrl && (
+                            <a
+                              href={project.demoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                              Demo
+                            </a>
+                          )}
+                          {project.sourceUrl && (
+                            <a
+                              href={project.sourceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-gray-600 dark:text-gray-400 hover:underline"
+                            >
+                              Kaynak
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {/* SONUÇ SAYACI */}
+              {!loading && (
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-6 text-center">
+                  {filteredProjects.length} / {projects.length} proje gösteriliyor
+                </p>
+              )}
             </div>
           </section>
 
@@ -199,7 +339,6 @@ function App() {
                 İletişim
               </h2>
 
-              {/* Örnek Alert — bilgilendirme */}
               {showAlert && (
                 <div className="mb-6">
                   <Alert
@@ -218,11 +357,8 @@ function App() {
                   <legend className="text-lg font-bold text-blue-800 dark:text-blue-300 px-2">
                     İletişim Formu
                   </legend>
-
-                  {/* Input component'leri */}
                   <Input id="name" label="Ad Soyad" placeholder="Örn. Ahmet Yılmaz" required />
                   <Input id="email" label="E-posta" type="email" placeholder="ad@mail.com" helpText="Spam göndermiyoruz, söz." required />
-
                   <div className="space-y-1">
                     <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Konu
@@ -237,7 +373,6 @@ function App() {
                       <option value="oneri">Öneri</option>
                     </select>
                   </div>
-
                   <div className="space-y-1">
                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Mesajınız
@@ -249,8 +384,6 @@ function App() {
                       className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-vertical"
                     />
                   </div>
-
-                  {/* Button component */}
                   <Button variant="primary" size="lg" type="submit" className="w-full sm:w-auto">
                     Gönder
                   </Button>
