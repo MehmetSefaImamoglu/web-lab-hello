@@ -1,4 +1,4 @@
-# Web LAB Projesi (LAB-1 → LAB-5)
+# Web LAB Projesi (LAB-1 → LAB-6 Ara Checkpoint #1)
 
 Web Tasarımı ve Programlama dersi kapsamında geliştirdiğim kişisel portföy projesi.  
 Vite + React + TypeScript altyapısıyla başladı, her lab'da yeni bir katman eklendi.
@@ -18,6 +18,7 @@ Vite + React + TypeScript altyapısıyla başladı, her lab'da yeni bir katman e
 | **LAB-3** | Responsive CSS | Mobile-first tasarım, Flexbox & Grid, Design Tokens, `clamp()` fluid typography |
 | **LAB-4** | Tailwind CSS & UI Kit | Tailwind v4 entegrasyonu, Button/Input/Card/Alert bileşenleri, dark mode |
 | **LAB-5** | JavaScript/TypeScript & State | Fetch API, async/await, TypeScript tipleri, state yönetimi, filtreleme & sıralama |
+| **LAB-6** | React Component Mimarisi & State Yönetimi | Props/State kullanımı, useMemo ile optimizasyon, Controlled Form validasyonu, Checkpoint #1 entegrasyonu |
 
 ---
 
@@ -47,24 +48,47 @@ npm run dev
 ```
 src/
 ├── components/
-│   ├── Button.tsx
-│   ├── Input.tsx
-│   ├── Card.tsx
-│   └── Alert.tsx
-├── pages/
-│   └── UIKit.tsx
+│   ├── layout/
+│   │   ├── Header.tsx          ← LAB-6: Sticky header, hamburger menü state
+│   │   └── Footer.tsx          ← LAB-6: Dinamik yıl, nav linkleri
+│   ├── ui/
+│   │   ├── Button.tsx          ← LAB-4/6: variant, size, fullWidth
+│   │   ├── Input.tsx           ← LAB-4/6: label, error, helpText
+│   │   ├── Card.tsx            ← LAB-4/6: elevated, outlined, filled
+│   │   └── Alert.tsx           ← LAB-4/6: info, success, warning, error
+│   ├── sections/
+│   │   ├── Hero.tsx            ← LAB-6: Gradient hero, CTA butonları
+│   │   ├── About.tsx           ← LAB-6: Profil, bio, skill etiketleri
+│   │   ├── Skills.tsx          ← LAB-6: Progress bar'lı kategori kartları
+│   │   ├── ProjectList.tsx     ← LAB-6: useEffect fetch + useMemo filtre
+│   │   └── ContactSection.tsx  ← LAB-6: ContactForm sarmalayıcısı
+│   └── forms/
+│       ├── ContactForm.tsx     ← LAB-6: Controlled form, validasyon, async submit
+│       └── ProjectFilter.tsx   ← LAB-6: Arama, kategori, sıralama (lifting state up)
 ├── services/
-│   └── projectService.ts   ← LAB-5: Fetch API servisi
+│   └── projectService.ts       ← LAB-5: Fetch API servisi
 ├── types/
-│   └── project.ts          ← LAB-5: TypeScript tipleri
+│   └── project.ts              ← LAB-5: TypeScript tipleri
 ├── utils/
-│   └── projectHelpers.ts   ← LAB-5: Filtreleme & sıralama
-├── App.tsx
+│   └── projectHelpers.ts       ← LAB-5: Filtreleme & sıralama
+├── App.tsx                     ← LAB-6: Orkestra şefi — sadece dark mode yönetir
 └── index.css
 public/
 └── data/
-    └── projects.json       ← LAB-5: Mock proje verisi
+    └── projects.json           ← LAB-5: Mock proje verisi (6 proje)
 ```
+
+---
+
+## LAB-6 (Ara Checkpoint #1) Öne Çıkan Özellikler
+
+- **Asenkron veri çekme** — `useEffect` ve Fetch API ile `public/data/projects.json` üzerinden veri yükleme; yükleniyor ve hata durumları ekranda gösteriliyor.
+- **Performans optimizasyonu** — `useMemo` ile arama, kategori ve sıralama filtrelerinin kombinasyonu önbellekleniyor; yalnızca bağımlılıklar değiştiğinde yeniden hesaplanıyor.
+- **Controlled İletişim Formu** — Tüm form alanları `value` + `onChange` ile React state'ine bağlı; regex e-posta kontrolü, minimum karakter validasyonu ve anlık per-field hata mesajları.
+- **Hamburger Menü** — `useState` ile yönetilen mobil menü; animasyonlu toggle butonu, tıklandığında kendiliğinden kapanıyor.
+- **Sıfır `any` — tam TypeScript strict mod** — `npx tsc --noEmit` sıfır hata, tüm prop ve state tipleri `interface` ile tanımlı.
+- **Lifting State Up** — `ProjectFilter` tüm kontrol state'lerini parent `ProjectList`'ten props olarak alır; tek yönlü veri akışı.
+- **Component Mimarisi** — `layout/`, `ui/`, `sections/`, `forms/` klasör ayrımıyla bağımsız, test edilebilir ve yeniden kullanılabilir bileşenler.
 
 ---
 
@@ -87,9 +111,7 @@ public/
 
 ---
 
-## UI Bileşenleri (LAB-4)
-
-Sayfadaki **UI Kit** butonuna tıklayarak bileşenleri canlı görebilirsin.
+## UI Bileşenleri (LAB-4 / LAB-6)
 
 | Bileşen | Varyantlar |
 |---------|------------|
@@ -105,5 +127,6 @@ Sayfadaki **UI Kit** butonuna tıklayarak bileşenleri canlı görebilirsin.
 ```
 main
 ├── feature/tailwindcss-ui-kit    ← LAB-4
-└── feature/typescript-projects   ← LAB-5
+├── feature/typescript-projects   ← LAB-5
+└── feature/checkpoint-1          ← LAB-6 (Ara Checkpoint #1)
 ```
